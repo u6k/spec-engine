@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="spec-engine" default="javacc" basedir=".">
+    <target name="javacc">
+        <echo message="${classpath}" />
+    </target>
+</project>

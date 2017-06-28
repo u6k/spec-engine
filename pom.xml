@@ -49,6 +49,22 @@
                     <downloadJavadocs>true</downloadJavadocs>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant</artifactId>
+                        <version>1.7.0</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <tasks>
+                        <property name="classpath" refid="maven.runtime.classpath" />
+                        <ant antfile="src/main/javacc/build.xml" target="javacc" inheritRefs="true" />
+                    </tasks>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
