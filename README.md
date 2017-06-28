@@ -45,6 +45,58 @@ TODO
 
 TODO
 
+### 開発用Dockerイメージを作成
+
+開発用Dockerイメージを作成します。
+
+```
+docker build -t spec-engine-dev -f Dockerfile-dev .
+```
+
+### 字句解析器、構文解析器を作成
+
+一部のソースコードは、Java言語ではなくJavaCC、JJTree用に書いてあります。これらのソースコードから、Java用のソースコードを作成します。
+
+```
+docker run \
+    --rm \
+    -v $(pwd):/var/my-app \
+    -v ~/.m2:/root/.m2 \
+    spec-engine-dev \
+        mvn antrun:run
+```
+
+### Eclipseプロジェクトを作成
+
+Eclipseで開発するため、Eclipseプロジェクトを作成します。
+
+```
+docker run \
+    --rm \
+    -v $(pwd):/var/my-app \
+    -v ~/.m2:/root/.m2 \
+    spec-engine-dev \
+        mvn eclipse:eclipse
+```
+
+### テスト、ビルド
+
+テストとビルドを実行します。
+
+```
+docker run \
+    --rm \
+    -v $(pwd):/var/my-app \
+    -v ~/.m2:/root/.m2 \
+    spec-engine-dev
+```
+
+実行用Dockerイメージを作成します。
+
+```
+docker build -t u6kapps/spec-engine .
+```
+
 ## 使い方
 
 TODO
