@@ -61,9 +61,8 @@ docker build -t spec-engine-dev -f Dockerfile-dev .
 docker run \
     --rm \
     -v $(pwd):/var/my-app \
-    -v ~/.m2:/root/.m2 \
     spec-engine-dev \
-        mvn antrun:run
+        ant -f src/main/javacc/build.xml
 ```
 
 ### Eclipseプロジェクトを作成
