@@ -3,7 +3,7 @@ MAINTAINER u6k.apps@gmail.com
 
 # Setup Apache Maven
 RUN apt-get update && \
-    apt-get install -y maven && \
+    apt-get install -y maven ant && \
     apt-get clean
 
 # Setup work directory
