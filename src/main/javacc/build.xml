@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="spec-engine" default="javacc" basedir=".">
+    <property name="src" location="." />
+    <property name="javacc.home" location="lib" />
+    <property name="jjt.file" location="test.jjt" />
+    <property name="jj.file" location="test.jj" />
     <target name="javacc">
-        <echo message="${classpath}" />
+        <jjtree target="${jjt.file}" javacchome="${javacc.home}" outputdirectory="${src}" />
+        <javacc target="${jj.file}" javacchome="${javacc.home}" outputdirectory="${src}" />
     </target>
 </project>
