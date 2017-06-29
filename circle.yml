@@ -6,15 +6,15 @@ machine:
 test:
     override:
         - docker build -t spec-engine-dev -f Dockerfile-dev .
-        - docker run \
-            --rm \
-            -v $(pwd):/var/my-app \
-            spec-engine-dev \
+        - docker run
+            --rm
+            -v $(pwd):/var/my-app
+            spec-engine-dev
                 ant -f src/main/javacc/build.xml
-        - docker run \
-            --rm \
-            -v $(pwd):/var/my-app \
-            -v ~/.m2:/root/.m2 \
+        - docker run
+            --rm
+            -v $(pwd):/var/my-app
+            -v ~/.m2:/root/.m2
                 spec-engine-dev
         - docker build -t u6kapps/spec-engine .
     post:
