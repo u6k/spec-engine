@@ -1,0 +1,30 @@
+options {
+    STATIC = false;
+}
+
+PARSER_BEGIN(MyParser)
+package me.u6k.spec_engine.parser;
+public class MyParser {
+
+}
+PARSER_END(MyParser)
+
+SKIP:
+{
+    " " | "\r" | "\t" | "\n"
+}
+
+TOKEN:
+{
+    <INTEGER: (["0"-"9"])+>
+}
+
+void doParse():
+{
+    Token integer;
+}
+{
+    integer = <INTEGER> {
+        System.out.println("inputted: " + integer.image);
+    }
+}
