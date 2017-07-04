@@ -45,6 +45,45 @@ TODO
 
 TODO
 
+### 開発用Dockerイメージを作成
+
+開発用Dockerイメージを作成します。
+
+```
+docker build -t spec-engine-dev -f Dockerfile-dev .
+```
+
+### Eclipseプロジェクトを作成
+
+Eclipseで開発するため、Eclipseプロジェクトを作成します。この時、ANTLR文法ファイルから、Java用ソースコードも作成されます。
+
+```
+docker run \
+    --rm \
+    -v $(pwd):/var/my-app \
+    -v ~/.m2:/root/.m2 \
+    spec-engine-dev \
+        mvn eclipse:eclipse
+```
+
+### テスト、ビルド
+
+テストとビルドを実行します。
+
+```
+docker run \
+    --rm \
+    -v $(pwd):/var/my-app \
+    -v ~/.m2:/root/.m2 \
+    spec-engine-dev
+```
+
+実行用Dockerイメージを作成します。
+
+```
+docker build -t u6kapps/spec-engine .
+```
+
 ## 使い方
 
 TODO
