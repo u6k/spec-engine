@@ -6,6 +6,12 @@ RUN apt-get update && \
     apt-get install -y maven && \
     apt-get clean
 
+# Setup ANTLR
+RUN mkdir -p /opt/bin/antlr/ && \
+    curl -o /opt/bin/antlr/antlr.jar http://www.antlr.org/download/antlr-4.7-complete.jar
+
+ENV CLASSPATH /opt/bin/antlr/antlr.jar
+
 # Setup work directory
 VOLUME /var/my-app
 WORKDIR /var/my-app
