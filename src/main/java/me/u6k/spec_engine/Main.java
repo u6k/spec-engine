@@ -19,23 +19,29 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Main {
 
+    private static final Logger L = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
 
     public Object parse(String text) {
+        L.debug("#parse: text={}", text);
         CharStream stream = CharStreams.fromString(text);
         SampleLexer lexer = new SampleLexer(stream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         SampleParser parser = new SampleParser(tokens);
-        SampleVisitor visitor = new SampleVisitorImpl();
+        SampleVisitor<Object> visitor = new SampleVisitorImpl();
         Object result = visitor.visit(parser.prog());
+        L.debug("result={}", result);
 
         return result;
     }
@@ -44,7 +50,7 @@ public class Main {
 
         @Override
         public Object visitProg(ProgContext ctx) {
-            System.out.println("visitProg:");
+            L.debug("visitProg:");
             this.printTokens(ctx.children);
 
             return super.visitProg(ctx);
@@ -52,7 +58,7 @@ public class Main {
 
         @Override
         public Object visitStat(StatContext ctx) {
-            System.out.println("visitStat:");
+            L.debug("visitStat:");
             this.printTokens(ctx.children);
 
             return super.visitStat(ctx);
@@ -60,7 +66,7 @@ public class Main {
 
         @Override
         public Object visitExprAssign(ExprAssignContext ctx) {
-            System.out.println("visitExprAssign: ID=" + ctx.ID());
+            L.debug("visitExprAssign: ID={}", ctx.ID());
             this.printTokens(ctx.children);
 
             return super.visitExprAssign(ctx);
@@ -68,7 +74,7 @@ public class Main {
 
         @Override
         public Object visitFormulaAssign(FormulaAssignContext ctx) {
-            System.out.println("visitFormulaAssign: ID=" + ctx.ID());
+            L.debug("visitFormulaAssign: ID={}", ctx.ID());
             this.printTokens(ctx.children);
 
             return super.visitFormulaAssign(ctx);
@@ -76,7 +82,7 @@ public class Main {
 
         @Override
         public Object visitTupleAssign(TupleAssignContext ctx) {
-            System.out.println("visitTupleAssign: ID=" + ctx.ID());
+            L.debug("visitTupleAssign: ID={}", ctx.ID());
             this.printTokens(ctx.children);
 
             return super.visitTupleAssign(ctx);
@@ -84,7 +90,7 @@ public class Main {
 
         @Override
         public Object visitElement(ElementContext ctx) {
-            System.out.println("visitElement:");
+            L.debug("visitElement:");
             this.printTokens(ctx.children);
 
             return super.visitElement(ctx);
@@ -92,7 +98,7 @@ public class Main {
 
         @Override
         public Object visitExpr(ExprContext ctx) {
-            System.out.println("visitExpr: ID=" + ctx.ID() + ", INT=" + ctx.INT() + ", ADD=" + ctx.ADD() + ", SUB=" + ctx.SUB() + ", MUL=" + ctx.MUL() + ", DIV=" + ctx.DIV());
+            L.debug("visitExpr: ID={}, INT={}, ADD={}, SUB={}, MUL={}, DIV={}", ctx.ID(), ctx.INT(), ctx.ADD(), ctx.SUB(), ctx.MUL(), ctx.DIV());
             this.printTokens(ctx.children);
 
             return super.visitExpr(ctx);
@@ -100,14 +106,14 @@ public class Main {
 
         @Override
         public Object visitFormula(FormulaContext ctx) {
-            System.out.println("visitFormula:");
+            L.debug("visitFormula:");
             this.printTokens(ctx.children);
 
             return super.visitFormula(ctx);
         }
 
         private void printTokens(List<ParseTree> ctx) {
-            ctx.forEach(x -> System.out.println("  child=[" + x.getClass().getName() + ", " + x + "]"));
+            ctx.forEach(x -> L.debug("  child=[{}, {}]", x.getClass().getName(), x));
         }
 
     }
