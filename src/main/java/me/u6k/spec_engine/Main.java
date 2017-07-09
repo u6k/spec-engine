@@ -3,18 +3,12 @@ package me.u6k.spec_engine;
 
 import java.util.List;
 
-import me.u6k.spec_engine.parser.SampleBaseVisitor;
-import me.u6k.spec_engine.parser.SampleLexer;
-import me.u6k.spec_engine.parser.SampleParser;
-import me.u6k.spec_engine.parser.SampleParser.ElementContext;
-import me.u6k.spec_engine.parser.SampleParser.ExprAssignContext;
-import me.u6k.spec_engine.parser.SampleParser.ExprContext;
-import me.u6k.spec_engine.parser.SampleParser.FormulaAssignContext;
-import me.u6k.spec_engine.parser.SampleParser.FormulaContext;
-import me.u6k.spec_engine.parser.SampleParser.ProgContext;
-import me.u6k.spec_engine.parser.SampleParser.StatContext;
-import me.u6k.spec_engine.parser.SampleParser.TupleAssignContext;
-import me.u6k.spec_engine.parser.SampleVisitor;
+import me.u6k.spec_engine.parser.PlantUmlBaseVisitor;
+import me.u6k.spec_engine.parser.PlantUmlLexer;
+import me.u6k.spec_engine.parser.PlantUmlParser;
+import me.u6k.spec_engine.parser.PlantUmlParser.PlantumlContext;
+import me.u6k.spec_engine.parser.PlantUmlParser.StatementContext;
+import me.u6k.spec_engine.parser.PlantUmlVisitor;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -35,81 +29,35 @@ public class Main {
 
     public Object parse(String text) {
         L.debug("#parse: text={}", text);
-        CharStream stream = CharStreams.fromString(text);
-        SampleLexer lexer = new SampleLexer(stream);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        SampleParser parser = new SampleParser(tokens);
-        SampleVisitor<Object> visitor = new SampleVisitorImpl();
-        Object result = visitor.visit(parser.prog());
-        L.debug("result={}", result);
 
+        CharStream stream = CharStreams.fromString(text);
+        PlantUmlLexer lexer = new PlantUmlLexer(stream);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        PlantUmlParser parser = new PlantUmlParser(tokens);
+
+        PlantUmlVisitor<Object> visitor = new PlantUmlVisitorImpl();
+        Object result = visitor.visit(parser.plantuml());
+
+        L.debug("result={}", result);
         return result;
     }
 
-    private class SampleVisitorImpl extends SampleBaseVisitor<Object> {
+    private class PlantUmlVisitorImpl extends PlantUmlBaseVisitor<Object> {
 
         @Override
-        public Object visitProg(ProgContext ctx) {
-            L.debug("visitProg:");
+        public Object visitPlantuml(PlantumlContext ctx) {
+            L.debug("visitPlantuml:");
             this.printTokens(ctx.children);
 
-            return super.visitProg(ctx);
+            return super.visitPlantuml(ctx);
         }
 
         @Override
-        public Object visitStat(StatContext ctx) {
-            L.debug("visitStat:");
+        public Object visitStatement(StatementContext ctx) {
+            L.debug("visitStatement:");
             this.printTokens(ctx.children);
 
-            return super.visitStat(ctx);
-        }
-
-        @Override
-        public Object visitExprAssign(ExprAssignContext ctx) {
-            L.debug("visitExprAssign: ID={}", ctx.ID());
-            this.printTokens(ctx.children);
-
-            return super.visitExprAssign(ctx);
-        }
-
-        @Override
-        public Object visitFormulaAssign(FormulaAssignContext ctx) {
-            L.debug("visitFormulaAssign: ID={}", ctx.ID());
-            this.printTokens(ctx.children);
-
-            return super.visitFormulaAssign(ctx);
-        }
-
-        @Override
-        public Object visitTupleAssign(TupleAssignContext ctx) {
-            L.debug("visitTupleAssign: ID={}", ctx.ID());
-            this.printTokens(ctx.children);
-
-            return super.visitTupleAssign(ctx);
-        }
-
-        @Override
-        public Object visitElement(ElementContext ctx) {
-            L.debug("visitElement:");
-            this.printTokens(ctx.children);
-
-            return super.visitElement(ctx);
-        }
-
-        @Override
-        public Object visitExpr(ExprContext ctx) {
-            L.debug("visitExpr: ID={}, INT={}, ADD={}, SUB={}, MUL={}, DIV={}", ctx.ID(), ctx.INT(), ctx.ADD(), ctx.SUB(), ctx.MUL(), ctx.DIV());
-            this.printTokens(ctx.children);
-
-            return super.visitExpr(ctx);
-        }
-
-        @Override
-        public Object visitFormula(FormulaContext ctx) {
-            L.debug("visitFormula:");
-            this.printTokens(ctx.children);
-
-            return super.visitFormula(ctx);
+            return super.visitStatement(ctx);
         }
 
         private void printTokens(List<ParseTree> ctx) {
