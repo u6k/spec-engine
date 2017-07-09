@@ -1,6 +1,9 @@
 
 package me.u6k.spec_engine;
 
+import java.io.IOException;
+
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -15,123 +18,88 @@ public class MainTest {
     private static final Logger L = LoggerFactory.getLogger(MainTest.class);
 
     @Test
-    public void test1() {
-        String text = "a = 100;";
+    public void 正常_1エントリー() throws Exception {
+        String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ok-1entry.pu");
         Object result = new Main().parse(text);
 
         L.debug("result={}", result);
     }
 
     @Test
-    public void test2() {
-        String text = "b = 100 * 2;";
+    public void 正常_3エントリー() throws Exception {
+        String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ok-3entry.pu");
         Object result = new Main().parse(text);
 
         L.debug("result={}", result);
     }
 
     @Test
-    public void test3() {
-        String text = "c = 100 - 20 * 3;";
+    public void 正常_空エントリー() throws Exception {
+        String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ok-empty.pu");
         Object result = new Main().parse(text);
 
         L.debug("result={}", result);
     }
 
     @Test
-    public void test4() {
-        String text = "d = true;";
+    public void 解析失敗_endumlが存在しない() throws Exception {
+        String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ng-enduml-not-found.pu");
         Object result = new Main().parse(text);
 
         L.debug("result={}", result);
     }
 
     @Test
-    public void test5() {
-        String text = "e = true && false;";
+    public void 解析失敗_IDから開始状態に遷移() throws Exception {
+        String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ng-id-to-state-start.pu");
         Object result = new Main().parse(text);
 
         L.debug("result={}", result);
     }
 
     @Test
-    public void test6() {
-        String text = "f = true -> true && false;";
+    public void 解析失敗_startumlが存在しない() throws Exception {
+        String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ng-startuml-not-found.pu");
         Object result = new Main().parse(text);
 
         L.debug("result={}", result);
     }
 
     @Test
-    public void test7() {
-        String text = "g = true || false <-> false;";
+    public void 解析失敗_開始状態から開始状態に遷移() throws Exception {
+        String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ng-state-start-to-start.pu");
         Object result = new Main().parse(text);
 
         L.debug("result={}", result);
     }
 
     @Test
-    public void test8() {
-        String text = "h = a + b * c;";
+    public void 解析失敗_遷移後状態が存在しない() throws Exception {
+        String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ok-3entry.pu");
         Object result = new Main().parse(text);
 
         L.debug("result={}", result);
     }
 
     @Test
-    public void test9() {
-        String text = "i = d && e || f;";
+    public void 解析失敗_遷移前状態が存在しない() throws Exception {
+        String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ng-from-state-not-found.pu");
         Object result = new Main().parse(text);
 
         L.debug("result={}", result);
     }
 
-    @Test
-    public void test10() {
-        String text = "j = ();";
-        Object result = new Main().parse(text);
+    private String readTestFile(String path) throws IOException {
+        L.debug("path={}", path);
 
-        L.debug("result={}", result);
-    }
+        String text = IOUtils.readLines(this.getClass().getResourceAsStream(path), "UTF-8")
+                        .stream()
+                        .map(x -> x + "\n")
+                        .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                        .toString();
 
-    @Test
-    public void test11() {
-        String text = "k = (100);";
-        Object result = new Main().parse(text);
-
-        L.debug("result={}", result);
-    }
-
-    @Test
-    public void test12() {
-        String text = "l = (b);";
-        Object result = new Main().parse(text);
-
-        L.debug("result={}", result);
-    }
-
-    @Test
-    public void test13() {
-        String text = "m = (x + y);";
-        Object result = new Main().parse(text);
-
-        L.debug("result={}", result);
-    }
-
-    @Test
-    public void test14() {
-        String text = "n = (x && y);";
-        Object result = new Main().parse(text);
-
-        L.debug("result={}", result);
-    }
-
-    @Test
-    public void test15() {
-        String text = "o = (x + y, x && y);";
-        Object result = new Main().parse(text);
-
-        L.debug("result={}", result);
+        L.debug("testFile={}", text);
+        return text;
     }
 
 }

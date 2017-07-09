@@ -1,0 +1,7 @@
+@startuml
+
+[*] --> abc
+abc --> def
+def --> ghi
+
+@enduml
