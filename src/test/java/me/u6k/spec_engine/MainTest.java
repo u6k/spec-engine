@@ -34,6 +34,14 @@ public class MainTest {
     }
 
     @Test
+    public void 正常_日本語の状態() throws Exception {
+        String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ok-1entry-japanese.pu");
+        Object result = new Main().parse(text);
+
+        L.debug("result={}", result);
+    }
+
+    @Test
     public void 正常_空エントリー() throws Exception {
         String text = readTestFile("/data/me/u6k/spec_engine/MainTest/ok-empty.pu");
         Object result = new Main().parse(text);
